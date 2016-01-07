@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="base_url">http://api.themoviedb.org/</string>
+    <string name="sort_by_vote">vote_count.desc</string>
+    <string name="sort_by_popularity">popularity.desc</string>
 </resources>

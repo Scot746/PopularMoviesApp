@@ -1,12 +1,17 @@
 package pedroscott.com.popularmoviesapp.app.ui.home;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,7 +53,7 @@ public class MainActivityFragment extends Fragment {
 
     private void initVars() {
         adapter = new AdapterMovies(new ArrayList<Movie>(),getActivity());
-        loadMovies();
+        loadMovies(getString(R.string.sort_by_popularity));
     }
 
     @Override
@@ -66,8 +71,10 @@ public class MainActivityFragment extends Fragment {
         rVHome.setAdapter(adapter);
     }
 
-    private void loadMovies() {
-        App.getRestClientPublic().getPublicService().getMovies().enqueue(new Callback<ResponseMovies>() {
+    private void loadMovies(String sort) {
+        App.getRestClientPublic().getPublicService()
+                .getMovies(sort,getString(R.string.api_key_themoviedb))
+                .enqueue(new Callback<ResponseMovies>() {
             @Override
             public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
                 movies = response.body().getResults();
@@ -83,4 +90,34 @@ public class MainActivityFragment extends Fragment {
             }
         });
     }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home: {
+                getActivity().onBackPressed();
+                return true;
+            }
+            case R.id.action_popularity: {
+                adapter.getItems().clear();
+                loadMovies(getString(R.string.sort_by_popularity));
+                return true;
+            }
+            case R.id.action_vote: {
+                adapter.getItems().clear();
+                loadMovies(getString(R.string.sort_by_vote));
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

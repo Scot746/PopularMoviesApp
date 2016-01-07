@@ -15,7 +15,7 @@ public class PublicService {
         this.apiService = apiService;
     }
 
-    public Call<ResponseMovies> getMovies() {
-        return apiService.getMovies();
+    public Call<ResponseMovies> getMovies(String sortBy, String key) {
+        return apiService.getMovies(sortBy,key);
     }
 }
