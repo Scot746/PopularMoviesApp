@@ -52,6 +52,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void initVars() {
+        setHasOptionsMenu(true);
         adapter = new AdapterMovies(new ArrayList<Movie>(),getActivity());
         loadMovies(getString(R.string.sort_by_popularity));
     }
