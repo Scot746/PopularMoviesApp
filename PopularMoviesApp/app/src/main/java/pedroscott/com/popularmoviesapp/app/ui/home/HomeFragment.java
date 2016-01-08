@@ -1,12 +1,9 @@
 package pedroscott.com.popularmoviesapp.app.ui.home;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,9 +30,9 @@ import retrofit.Retrofit;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
-    private static final String TAG = MainActivityFragment.class.getSimpleName();
+    private static final String TAG = HomeFragment.class.getSimpleName();
 
     private AdapterMovies adapter;
     private GridLayoutManager layoutManager;
@@ -45,6 +42,10 @@ public class MainActivityFragment extends Fragment {
     @Bind(R.id.rVHome)
     RecyclerView rVHome;
 
+    public static Fragment newInstance() {
+        return new HomeFragment();
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,7 @@ public class MainActivityFragment extends Fragment {
 
     private void initVars() {
         setHasOptionsMenu(true);
-        adapter = new AdapterMovies(new ArrayList<Movie>(),getActivity());
+        adapter = new AdapterMovies(new ArrayList<Movie>(), getActivity());
         loadMovies(getString(R.string.sort_by_popularity));
     }
 
@@ -62,6 +63,7 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+
         intViews();
         return view;
     }
@@ -74,22 +76,22 @@ public class MainActivityFragment extends Fragment {
 
     private void loadMovies(String sort) {
         App.getRestClientPublic().getPublicService()
-                .getMovies(sort,getString(R.string.api_key_themoviedb))
+                .getMovies(sort, getString(R.string.api_key_themoviedb))
                 .enqueue(new Callback<ResponseMovies>() {
-            @Override
-            public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
-                movies = response.body().getResults();
-                adapter.setData(movies);
-                page = response.body().getPage();
-                DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
-            }
+                    @Override
+                    public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
+                        movies = response.body().getResults();
+                        adapter.setData(movies);
+                        page = response.body().getPage();
+                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+                    }
 
-            @Override
-            public void onFailure(Throwable t) {
-                DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+                    @Override
+                    public void onFailure(Throwable t) {
+                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
 
-            }
-        });
+                    }
+                });
     }
 
 

@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
+import pedroscott.com.popularmoviesapp.app.ui.base.BaseActivity;
+import pedroscott.com.popularmoviesapp.app.ui.detail.DetailFragment;
 import pedroscott.com.popularmoviesapp.model.Movie;
 
 /**
@@ -61,7 +63,7 @@ public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.ViewHolder
         return items;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iVItemMovie)
         ImageView iVItemMovie;
@@ -69,6 +71,15 @@ public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.ViewHolder
         public ViewHolder(View v) {
             super(v);
             ButterKnife.bind(this, v);
+            iVItemMovie.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Movie movie = getItems().get(getAdapterPosition());
+                    ((BaseActivity) v.getContext()).navigateToLowLevel(
+                            DetailFragment.newInstance(movie),
+                            v.getContext().getString(R.string.frg_details_title));
+                }
+            });
         }
     }
 

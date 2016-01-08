@@ -3,4 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Default -->
+    <dimen name="default_extra_small_size">2dp</dimen>
+    <dimen name="default_small_size">4dp</dimen>
+    <dimen name="default_medium_size">8dp</dimen>
+    <dimen name="default_large_size">16dp</dimen>
+    <dimen name="default_extra_large_size">32dp</dimen>
+    <dimen name="frg_detail_title_size">30sp</dimen>
 </resources>
