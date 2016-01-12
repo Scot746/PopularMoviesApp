@@ -1,5 +1,6 @@
 package pedroscott.com.popularmoviesapp.app.ui.base;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,21 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 
 import pedroscott.com.popularmoviesapp.R;
-
+/**
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 public class BaseActivity extends AppCompatActivity {
 
     protected ArrayList<String> titleStack = new ArrayList<String>();
@@ -19,16 +34,26 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getResources().getBoolean(R.bool.is_tablet)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
     }
-
+    /**
+     * Get the toolbar in the baseActivity instance.
+     */
     public Toolbar getToolbar() {
         return toolbar;
     }
-
+    /**
+     * Set the toolbar to the baseActivity instance.
+     */
     public void setToolbar(Toolbar toolbar) {
         this.toolbar = toolbar;
     }
 
+    /**
+     * Method to navigate using  FragmentTransaction and FragmentManager.
+     */
     public static void navigateTo(FragmentManager manager, Fragment newFragment, int containerId, boolean options) {
         FragmentTransaction ft = manager.beginTransaction();
         ft.replace(containerId, newFragment, newFragment.getClass().getSimpleName());
@@ -38,16 +63,25 @@ public class BaseActivity extends AppCompatActivity {
         ft.commit();
     }
 
+    /**
+     * clean Fragment Stack in the FragmentManager.
+     */
     public static void cleanFragmentStack(FragmentManager fm) {
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
+    /**
+     * Update the toolbar title.
+     */
     public void updateActionBarTitle() {
         if (getToolbar() != null) {
             getToolbar().setTitle(titleStack.get(titleStack.size() - 1));
         }
     }
 
+    /**
+     * Navigate in the R.id.container with the SupportFragmentManager.
+     */
     public void navigateMainContent(Fragment frg, String title) {
         cleanFragmentStack(getSupportFragmentManager());
         navigateTo(getSupportFragmentManager(), frg, R.id.container, false);
@@ -56,30 +90,14 @@ public class BaseActivity extends AppCompatActivity {
         updateActionBarTitle();
     }
 
-    public void navigateToLowLevel(Fragment frg, String title) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+    /**
+     * Navigate in the any FrameLayout container with the SupportFragmentManager.
+     */
+    public void navigateDetailContent(Fragment frg, String title, int container) {
+        cleanFragmentStack(getSupportFragmentManager());
+        navigateTo(getSupportFragmentManager(), frg, container, false);
+        titleStack.clear();
         titleStack.add(title);
-        navigateTo(getSupportFragmentManager(), frg, R.id.container, true);
         updateActionBarTitle();
-
     }
-
-
-    @Override
-    public void onBackPressed() {
-        if ((titleStack.size()) > 0) {
-            titleStack.remove(titleStack.size() - 1);
-        }
-        if (titleStack.size() == 1) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setHomeButtonEnabled(false);
-        }
-        if (titleStack.size() > 0) {
-            updateActionBarTitle();
-        }
-        super.onBackPressed();
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package pedroscott.com.popularmoviesapp.app.ui.home;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,9 +27,20 @@ import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-
 /**
- * A placeholder fragment containing a simple view.
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 public class HomeFragment extends Fragment {
 
@@ -36,7 +48,6 @@ public class HomeFragment extends Fragment {
 
     private AdapterMovies adapter;
     private GridLayoutManager layoutManager;
-    private int page;
     public ArrayList<Movie> movies;
 
     @Bind(R.id.rVHome)
@@ -49,13 +60,19 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initVars();
+        initVars(savedInstanceState);
     }
 
-    private void initVars() {
+    private void initVars(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        adapter = new AdapterMovies(new ArrayList<Movie>(), getActivity());
-        loadMovies(getString(R.string.sort_by_popularity));
+        if (savedInstanceState != null) {
+            movies = (ArrayList<Movie>) savedInstanceState.getSerializable(Movie.MOVIES);
+            adapter = new AdapterMovies(movies);
+        } else {
+            movies = new ArrayList<Movie>();
+            adapter = new AdapterMovies(new ArrayList<Movie>());
+            loadMovies(getString(R.string.sort_by_popularity));
+        }
     }
 
     @Override
@@ -63,13 +80,13 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
-
         intViews();
         return view;
     }
 
     private void intViews() {
-        layoutManager = new GridLayoutManager(getActivity(), 2);
+        layoutManager = new GridLayoutManager(getActivity(), getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
+        rVHome.setHasFixedSize(true);
         rVHome.setLayoutManager(layoutManager);
         rVHome.setAdapter(adapter);
     }
@@ -80,10 +97,14 @@ public class HomeFragment extends Fragment {
                 .enqueue(new Callback<ResponseMovies>() {
                     @Override
                     public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
-                        movies = response.body().getResults();
-                        adapter.setData(movies);
-                        page = response.body().getPage();
-                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+                        try {
+                            movies = response.body().getResults();
+                            adapter.setData(movies);
+                            DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -92,6 +113,12 @@ public class HomeFragment extends Fragment {
 
                     }
                 });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(Movie.MOVIES, movies);
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -109,12 +136,12 @@ public class HomeFragment extends Fragment {
                 return true;
             }
             case R.id.action_popularity: {
-                adapter.getItems().clear();
+                movies.clear();
                 loadMovies(getString(R.string.sort_by_popularity));
                 return true;
             }
             case R.id.action_vote: {
-                adapter.getItems().clear();
+                movies.clear();
                 loadMovies(getString(R.string.sort_by_vote));
                 return true;
             }

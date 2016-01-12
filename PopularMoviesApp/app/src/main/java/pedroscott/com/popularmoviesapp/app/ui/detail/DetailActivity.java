@@ -1,5 +1,7 @@
-package pedroscott.com.popularmoviesapp.app.ui;
+package pedroscott.com.popularmoviesapp.app.ui.detail;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
@@ -7,7 +9,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.ui.base.BaseActivity;
-import pedroscott.com.popularmoviesapp.app.ui.home.HomeFragment;
+import pedroscott.com.popularmoviesapp.model.Movie;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
@@ -24,10 +26,21 @@ import pedroscott.com.popularmoviesapp.app.ui.home.HomeFragment;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class MainActivity extends BaseActivity {
+public class DetailActivity extends BaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+
+    /**
+     * Create a new Instance of the activity with the movie form data.
+     */
+    public static void newInstance(Activity activity, Movie movie) {
+        Intent intent = new Intent(activity, DetailActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(Movie.MOVIE, movie);
+        intent.putExtras(extras);
+        activity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +49,15 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setToolbar(toolbar);
-        if (savedInstanceState != null) {
-            navigateMainContent(getSupportFragmentManager().getFragment(
-                    savedInstanceState, "mContent"), getString(R.string.app_name));
-        } else {
-            navigateMainContent(HomeFragment.newInstance(), getString(R.string.app_name));
-        }
+        initVars();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        getSupportFragmentManager().putFragment(outState, "mContent", getSupportFragmentManager().findFragmentById(R.id.container));
+    private void initVars() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getIntent() != null && getIntent().getExtras().containsKey(Movie.MOVIE)) {
+            navigateMainContent(DetailFragment.newInstance((Movie) getIntent().getExtras().getParcelable(Movie.MOVIE)), getString(R.string.app_name));
+        }
     }
 
 }

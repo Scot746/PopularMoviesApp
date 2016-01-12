@@ -2,8 +2,9 @@
     <string name="app_name">Pop Movies</string>
     <string name="action_settings">Settings</string>
     <string name="action_popularity">Popular movies</string>
-    <string name="action_vote">Highest-rated</string>
+    <string name="action_vote">Highest Rated</string>
     <string name="frg_details_title">Movie Detail</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="frg_detail_averages">%1$s/10</string>
+    <string name="url_images_files">http://image.tmdb.org/t/p/w185/</string>
 </resources>
