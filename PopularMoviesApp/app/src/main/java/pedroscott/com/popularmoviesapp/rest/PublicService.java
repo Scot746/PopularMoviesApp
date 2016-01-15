@@ -32,8 +32,8 @@ public class PublicService {
     /**
      * Get the movies to show with the sortBy to define the list of movies that you want.
      */
-    public Call<ResponseMovies> getMovies(String sortBy ) {
-        return apiService.getMovies(sortBy);
+    public Call<ResponseMovies> getMovies(int page,String sortBy ) {
+        return apiService.getMovies(page,sortBy);
     }
 
     /**

@@ -51,10 +51,10 @@ public class DetailFragment extends Fragment {
     @Bind(R.id.tVFrgDetailSynopsis)
     TextView tVFrgDetailSynopsis;
 
-    @Bind(R.id.pBFrgDetailTrailers)
-    ProgressBar pBFrgDetailTrailers;
-    @Bind(R.id.pBFrgDetailReviews)
-    ProgressBar pBFrgDetailReviews;
+//    @Bind(R.id.pBFrgDetailTrailers)
+//    ProgressBar pBFrgDetailTrailers;
+//    @Bind(R.id.pBFrgDetailReviews)
+//    ProgressBar pBFrgDetailReviews;
 
     private Movie movie;
 

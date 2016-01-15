@@ -11,4 +11,5 @@
     <dimen name="default_large_size">16dp</dimen>
     <dimen name="default_extra_large_size">32dp</dimen>
     <dimen name="frg_detail_title_size">30sp</dimen>
+    <dimen name="radios_cards">4dp</dimen>
 </resources>

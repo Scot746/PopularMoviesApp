@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
+import pedroscott.com.popularmoviesapp.app.ui.MainActivity;
 import pedroscott.com.popularmoviesapp.app.ui.base.BaseActivity;
 import pedroscott.com.popularmoviesapp.app.ui.detail.DetailActivity;
 import pedroscott.com.popularmoviesapp.app.ui.detail.DetailFragment;
@@ -56,6 +57,7 @@ public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.ViewHolder
         Glide.with(holder.iVItemMovie.getContext())
                 .load(holder.iVItemMovie.getContext().getString(R.string.url_images_files) + movie.getPosterPath())
                 .fitCenter()
+                .centerCrop()
                 .into(holder.iVItemMovie);
     }
 
@@ -87,7 +89,8 @@ public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Movie movie = getItems().get(getAdapterPosition());
-                    if (v.getContext().getResources().getBoolean(R.bool.is_tablet)) {
+                    if (v.getContext() instanceof MainActivity
+                            && ((MainActivity) v.getContext()).isScreamWithToPages()) {
                         ((BaseActivity) v.getContext()).navigateDetailContent(
                                 DetailFragment.newInstance(movie),
                                 v.getContext().getString(R.string.app_name), R.id.container_detail);

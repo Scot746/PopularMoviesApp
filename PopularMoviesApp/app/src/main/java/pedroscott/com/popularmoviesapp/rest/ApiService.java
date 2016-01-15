@@ -27,7 +27,8 @@ import retrofit.http.Query;
 public interface ApiService {
 
     @GET("3/discover/movie")
-    Call<ResponseMovies> getMovies(@Query("sort_by") String sort_by);
+    Call<ResponseMovies> getMovies(@Query("page") int page,
+                                   @Query("sort_by") String sort_by);
 
     @GET("3/movie/{id}/videos")
     Call<ResponseMovieTrailers> getMovieTrailers(@Path("id") int id);

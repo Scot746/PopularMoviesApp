@@ -28,6 +28,7 @@ public class MainActivity extends BaseActivity {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    private boolean screamWithToPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class MainActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         setToolbar(toolbar);
+        if(findViewById(R.id.container_detail) != null){
+            screamWithToPages = true;
+        }
         if (savedInstanceState != null) {
             navigateMainContent(getSupportFragmentManager().getFragment(
                     savedInstanceState, "mContent"), getString(R.string.app_name));
@@ -50,4 +54,7 @@ public class MainActivity extends BaseActivity {
         getSupportFragmentManager().putFragment(outState, "mContent", getSupportFragmentManager().findFragmentById(R.id.container));
     }
 
+    public boolean isScreamWithToPages() {
+        return screamWithToPages;
+    }
 }

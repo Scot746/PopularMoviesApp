@@ -23,19 +23,20 @@ import pedroscott.com.popularmoviesapp.app.ui.home.adapter.AdapterMovies;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovies;
 import pedroscott.com.popularmoviesapp.utils.DebugUtils;
+import pedroscott.com.popularmoviesapp.utils.EndlessRecyclerOnScrollListener;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,6 +53,9 @@ public class HomeFragment extends Fragment {
 
     @Bind(R.id.rVHome)
     RecyclerView rVHome;
+    private int page = 1;
+    private int finalPage = 1000;
+    private String selectSort;
 
     public static Fragment newInstance() {
         return new HomeFragment();
@@ -66,7 +70,7 @@ public class HomeFragment extends Fragment {
     private void initVars(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         if (savedInstanceState != null) {
-            movies = (ArrayList<Movie>) savedInstanceState.getSerializable(Movie.MOVIES);
+            movies = savedInstanceState.getParcelableArrayList(Movie.MOVIES);
             adapter = new AdapterMovies(movies);
         } else {
             movies = new ArrayList<Movie>();
@@ -89,22 +93,32 @@ public class HomeFragment extends Fragment {
         rVHome.setHasFixedSize(true);
         rVHome.setLayoutManager(layoutManager);
         rVHome.setAdapter(adapter);
+        rVHome.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int currentPage) {
+                page = currentPage;
+                if (finalPage >= currentPage) {
+                    loadMovies(selectSort);
+                }
+
+            }
+        });
     }
 
     private void loadMovies(String sort) {
+        selectSort = sort;
         App.getRestClientPublic().getPublicService()
-                .getMovies(sort)
+                .getMovies(page,sort)
                 .enqueue(new Callback<ResponseMovies>() {
                     @Override
                     public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
                         try {
-                            movies = response.body().getResults();
+                            movies.addAll(response.body().getResults());
                             adapter.setData(movies);
                             DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                     @Override
@@ -117,7 +131,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(Movie.MOVIES, movies);
+        outState.putParcelableArrayList(Movie.MOVIES, movies);
         super.onSaveInstanceState(outState);
     }
 
@@ -137,11 +151,13 @@ public class HomeFragment extends Fragment {
             }
             case R.id.action_popularity: {
                 movies.clear();
+                adapter.getItems().clear();
                 loadMovies(getString(R.string.sort_by_popularity));
                 return true;
             }
             case R.id.action_vote: {
                 movies.clear();
+                adapter.getItems().clear();
                 loadMovies(getString(R.string.sort_by_vote));
                 return true;
             }
