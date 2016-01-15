@@ -1,5 +1,8 @@
 package pedroscott.com.popularmoviesapp.app.ui.detail;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,17 +22,24 @@ import com.bumptech.glide.Glide;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
+import pedroscott.com.popularmoviesapp.app.App;
 import pedroscott.com.popularmoviesapp.model.Movie;
+import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieReviews;
+import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieTrailers;
+import pedroscott.com.popularmoviesapp.utils.DebugUtils;
+import retrofit.Callback;
+import retrofit.Response;
+import retrofit.Retrofit;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,6 +60,11 @@ public class DetailFragment extends Fragment {
     TextView tVFrgDetailRate;
     @Bind(R.id.tVFrgDetailSynopsis)
     TextView tVFrgDetailSynopsis;
+
+    @Bind(R.id.pBFrgDetailTrailers)
+    ProgressBar pBFrgDetailTrailers;
+    @Bind(R.id.pBFrgDetailReviews)
+    ProgressBar pBFrgDetailReviews;
 
     private Movie movie;
 
@@ -73,7 +89,48 @@ public class DetailFragment extends Fragment {
         setHasOptionsMenu(true);
         if (getArguments() != null && getArguments().containsKey(Movie.MOVIE)) {
             movie = getArguments().getParcelable(Movie.MOVIE);
+            getTrailers(movie.getId());
+            getReviews(movie.getId());
+
         }
+    }
+
+    private void getReviews(int id) {
+        App.getRestClientPublic().getPublicService()
+                .getMovieReviews(id)
+                .enqueue(new Callback<ResponseMovieReviews>() {
+                    @Override
+                    public void onResponse(Response<ResponseMovieReviews> response, Retrofit retrofit) {
+                        pBFrgDetailReviews.setVisibility(View.GONE);
+                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+
+                    }
+                });
+    }
+
+
+    private void getTrailers(int id) {
+        App.getRestClientPublic().getPublicService()
+                .getMovieTrailers(id)
+                .enqueue(new Callback<ResponseMovieTrailers>() {
+                    @Override
+                    public void onResponse(Response<ResponseMovieTrailers> response, Retrofit retrofit) {
+                        pBFrgDetailTrailers.setVisibility(View.GONE);
+                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+//
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+
+                    }
+                });
     }
 
     @Override

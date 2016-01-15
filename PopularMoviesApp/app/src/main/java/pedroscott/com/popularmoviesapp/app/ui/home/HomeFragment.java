@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
 
     private void loadMovies(String sort) {
         App.getRestClientPublic().getPublicService()
-                .getMovies(sort, getString(R.string.api_key_themoviedb))
+                .getMovies(sort)
                 .enqueue(new Callback<ResponseMovies>() {
                     @Override
                     public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {

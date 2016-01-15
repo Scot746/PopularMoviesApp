@@ -1,5 +1,7 @@
 package pedroscott.com.popularmoviesapp.rest;
 
+import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieReviews;
+import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieTrailers;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovies;
 import retrofit.Call;
 
@@ -24,12 +26,28 @@ public class PublicService {
 
     public PublicService(ApiService apiService) {
         this.apiService = apiService;
+
     }
 
     /**
      * Get the movies to show with the sortBy to define the list of movies that you want.
      */
-    public Call<ResponseMovies> getMovies(String sortBy, String key) {
-        return apiService.getMovies(sortBy, key);
+    public Call<ResponseMovies> getMovies(String sortBy ) {
+        return apiService.getMovies(sortBy);
+    }
+
+    /**
+     * Get the trailers of a movie.
+     */
+    public Call<ResponseMovieTrailers> getMovieTrailers(int id) {
+        return apiService.getMovieTrailers(id);
+    }
+
+
+    /**
+     * Get the reviews of a movie.
+     */
+    public Call<ResponseMovieReviews> getMovieReviews(int id) {
+        return apiService.getMovieReviews(id);
     }
 }

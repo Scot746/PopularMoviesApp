@@ -2,18 +2,20 @@ package pedroscott.com.popularmoviesapp.app;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.facebook.stetho.Stetho;
+
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.rest.RestClientPublic;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +29,13 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        restClientPublic = new RestClientPublic(getString(R.string.base_url));
+        restClientPublic = new RestClientPublic(getString(R.string.base_url),
+                getString(R.string.api_key_themoviedb));
+        stetho();
+    }
+
+    private void stetho() {
+        Stetho.initializeWithDefaults(this);
     }
 
     /**

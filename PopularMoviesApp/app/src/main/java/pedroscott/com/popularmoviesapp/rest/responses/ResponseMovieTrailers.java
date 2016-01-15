@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-import pedroscott.com.popularmoviesapp.model.Movie;
+import pedroscott.com.popularmoviesapp.model.Trailer;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
@@ -22,7 +22,7 @@ import pedroscott.com.popularmoviesapp.model.Movie;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class ResponseMovies {
+public class ResponseMovieTrailers {
 
     @SerializedName("page")
     @Expose
@@ -30,7 +30,7 @@ public class ResponseMovies {
 
     @SerializedName("results")
     @Expose
-    private ArrayList<Movie> results;
+    private ArrayList<Trailer> results;
 
     @SerializedName("total_results")
     @Expose
@@ -49,11 +49,11 @@ public class ResponseMovies {
         this.page = page;
     }
 
-    public ArrayList<Movie> getResults() {
+    public ArrayList<Trailer> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Movie> results) {
+    public void setResults(ArrayList<Trailer> results) {
         this.results = results;
     }
 
