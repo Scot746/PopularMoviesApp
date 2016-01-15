@@ -1,8 +1,5 @@
 package pedroscott.com.popularmoviesapp.app.ui.detail;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,14 +19,7 @@ import com.bumptech.glide.Glide;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
-import pedroscott.com.popularmoviesapp.app.App;
 import pedroscott.com.popularmoviesapp.model.Movie;
-import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieReviews;
-import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieTrailers;
-import pedroscott.com.popularmoviesapp.utils.DebugUtils;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
@@ -89,49 +79,49 @@ public class DetailFragment extends Fragment {
         setHasOptionsMenu(true);
         if (getArguments() != null && getArguments().containsKey(Movie.MOVIE)) {
             movie = getArguments().getParcelable(Movie.MOVIE);
-            getTrailers(movie.getId());
-            getReviews(movie.getId());
+//            getTrailers(movie.getId());
+//            getReviews(movie.getId());
 
         }
     }
 
-    private void getReviews(int id) {
-        App.getRestClientPublic().getPublicService()
-                .getMovieReviews(id)
-                .enqueue(new Callback<ResponseMovieReviews>() {
-                    @Override
-                    public void onResponse(Response<ResponseMovieReviews> response, Retrofit retrofit) {
-                        pBFrgDetailReviews.setVisibility(View.GONE);
-                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
-
-                    }
-                });
-    }
-
-
-    private void getTrailers(int id) {
-        App.getRestClientPublic().getPublicService()
-                .getMovieTrailers(id)
-                .enqueue(new Callback<ResponseMovieTrailers>() {
-                    @Override
-                    public void onResponse(Response<ResponseMovieTrailers> response, Retrofit retrofit) {
-                        pBFrgDetailTrailers.setVisibility(View.GONE);
-                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+//    private void getReviews(int id) {
+//        App.getRestClientPublic().getPublicService()
+//                .getMovieReviews(id)
+//                .enqueue(new Callback<ResponseMovieReviews>() {
+//                    @Override
+//                    public void onResponse(Response<ResponseMovieReviews> response, Retrofit retrofit) {
+//                        pBFrgDetailReviews.setVisibility(View.GONE);
+//                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+//                    }
 //
-                    }
+//                    @Override
+//                    public void onFailure(Throwable t) {
+//                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+//
+//                    }
+//                });
+//    }
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
 
-                    }
-                });
-    }
+//    private void getTrailers(int id) {
+//        App.getRestClientPublic().getPublicService()
+//                .getMovieTrailers(id)
+//                .enqueue(new Callback<ResponseMovieTrailers>() {
+//                    @Override
+//                    public void onResponse(Response<ResponseMovieTrailers> response, Retrofit retrofit) {
+//                        pBFrgDetailTrailers.setVisibility(View.GONE);
+//                        DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+////
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Throwable t) {
+//                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+//
+//                    }
+//                });
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
