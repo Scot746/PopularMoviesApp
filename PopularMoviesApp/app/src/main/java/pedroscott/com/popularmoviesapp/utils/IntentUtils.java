@@ -10,7 +10,7 @@ import android.net.Uri;
  */
 public class IntentUtils {
 
-    public void goToYooTube(Context context,PackageManager pm, String url ){
+    public static void goToYooTube(Context context, String url){
         context.startActivity(newYouTubeIntent(context.getPackageManager(),url));
     }
     /**
@@ -20,7 +20,7 @@ public class IntentUtils {
      * @param url The URL or YouTube video ID.
      * @return the intent to open the YouTube app or Web Browser to play the video
      */
-    public static Intent newYouTubeIntent(PackageManager pm, String url) {
+    private static Intent newYouTubeIntent(PackageManager pm, String url) {
         Intent intent;
         if (url.length() == 11) {
             // youtube video id
