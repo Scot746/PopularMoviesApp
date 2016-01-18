@@ -7,13 +7,48 @@
     android:layout_margin="@dimen/default_small_size"
     app:cardCornerRadius="@dimen/radios_cards">
 
-    <TextView
-        android:id="@+id/tVItemReview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/rLItemReviewAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/default_medium_size">
+
+            <TextView
+                style="@style/TextViewTitle"
+                android:text="@string/frg_detail_review_item_author" />
+
+            <TextView
+                android:id="@+id/tVItemReviewAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tVItemReviewTitle"
+            style="@style/TextViewTitle"
+            android:layout_marginLeft="@dimen/default_medium_size"
+            android:layout_below="@+id/rLItemReviewAuthor"
+            android:text="@string/frg_detail_review_item_review" />
+
+        <TextView
+            android:id="@+id/tVItemReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tVItemReviewTitle"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/default_medium_size"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
 
 </android.support.v7.widget.CardView>
 

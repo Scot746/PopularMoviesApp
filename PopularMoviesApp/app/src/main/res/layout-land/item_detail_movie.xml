@@ -42,6 +42,7 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -50,12 +51,23 @@
             android:padding="@dimen/default_large_size">
 
             <TextView
+                style="@style/TextViewTitle"
+                android:layout_marginRight="@dimen/default_medium_size"
+                android:text="@string/frg_details_item_movie_realese_date" />
+
+            <TextView
                 android:id="@+id/tVFrgDetailDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/default_small_size"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp" />
+
+
+            <TextView
+                style="@style/TextViewTitle"
+                android:layout_marginRight="@dimen/default_medium_size"
+                android:text="@string/frg_details_item_movie_average" />
 
             <TextView
                 android:id="@+id/tVFrgDetailRate"
@@ -71,7 +83,23 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbars="vertical" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/bTFrgDetailGoToTrailers"
+                    style="@style/ButtonsStyle"
+                    android:text="@string/frg_details_item_movie_see_trailers" />
+
+                <Button
+                    android:id="@+id/bTFrgDetailGoToReviews"
+                    style="@style/ButtonsStyle"
+                    android:text="@string/frg_details_item_movie_read_reviews" />
+            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
 

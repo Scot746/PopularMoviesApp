@@ -8,4 +8,17 @@
     <string name="frg_detail_averages">%1$s/10</string>
     <string name="url_images_files">http://image.tmdb.org/t/p/w185/</string>
     <string name="url_images_youtube">http://img.youtube.com/vi/%1$s/default.jpg</string>
+    <string name="trailers_title">Trailers</string>
+    <string name="reviews_title">Reviews</string>
+    <string name="frg_detail_review_item_author">Author:</string>
+    <string name="frg_detail_review_item_review">Review:</string>
+    <string name="frg_details_item_movie_realese_date">Realese date:</string>
+    <string name="frg_details_item_movie_average">Average:</string>
+    <string name="frg_details_item_movie_see_trailers">See Trailers</string>
+    <string name="frg_details_item_movie_read_reviews">Read Reviews</string>
+    <string name="trailers_entry_title">No trailers available in this movie</string>
+    <string name="reviews_entry_title">No reviews available in this movie.</string>
+    <string name="action_share">Share trailer</string>
+    <string name="url_video_youtube">https://www.youtube.com/watch?v=%1$s</string>
+    <string name="action_favorites">Favorites</string>
 </resources>

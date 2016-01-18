@@ -2,36 +2,33 @@ package pedroscott.com.popularmoviesapp.app.ui.detail;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
-import pedroscott.com.popularmoviesapp.app.ui.detail.adapter.AdapterReviews;
-import pedroscott.com.popularmoviesapp.app.ui.detail.adapter.AdapterTrailers;
+import pedroscott.com.popularmoviesapp.app.ui.detail.adapter.AdapterDetail;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.model.Review;
 import pedroscott.com.popularmoviesapp.model.Trailer;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieReviews;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovieTrailers;
 import pedroscott.com.popularmoviesapp.utils.DebugUtils;
+import pedroscott.com.popularmoviesapp.utils.ShareUtils;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -55,30 +52,20 @@ public class DetailFragment extends Fragment {
 
     private static final String TAG = DetailFragment.class.getSimpleName();
 
-    @Bind(R.id.tVFrgDetailTitleMovie)
-    TextView tVFrgDetailTitleMovie;
-    @Bind(R.id.iVFrgDetailCover)
-    ImageView iVFrgDetailCover;
-    @Bind(R.id.tVFrgDetailDate)
-    TextView tVFrgDetailDate;
-    @Bind(R.id.tVFrgDetailRate)
-    TextView tVFrgDetailRate;
-    @Bind(R.id.tVFrgDetailSynopsis)
-    TextView tVFrgDetailSynopsis;
-    @Bind(R.id.pBFrgDetailTrailers)
-    ProgressBar pBFrgDetailTrailers;
-    @Bind(R.id.pBFrgDetailReviews)
-    ProgressBar pBFrgDetailReviews;
-    @Bind(R.id.rVDetailTrailers)
-    RecyclerView rVDetailTrailers;
-    @Bind(R.id.rVDetailReviews)
-    RecyclerView rVDetailReviews;
+    @Bind(R.id.rVDetail)
+    RecyclerView rVDetail;
+
+    @Bind(R.id.fBDetailsFavorites)
+    FloatingActionButton fBDetailsFavorites;
+
+    @OnClick(R.id.fBDetailsFavorites)
+    public void setfavorite(){
+        fBDetailsFavorites.setSelected(true);
+    }
 
     private Movie movie;
-    private AdapterTrailers adapterTrailers;
-    private AdapterReviews adapterReviews;
-    private LinearLayoutManager layoutManagerTrailers;
-    private LinearLayoutManager layoutManagerReviews;
+    private AdapterDetail adapterDetail;
+    private LinearLayoutManager layoutManagerDetails;
 
 
     /**
@@ -102,8 +89,7 @@ public class DetailFragment extends Fragment {
         setHasOptionsMenu(true);
         if (getArguments() != null && getArguments().containsKey(Movie.MOVIE)) {
             movie = getArguments().getParcelable(Movie.MOVIE);
-            adapterTrailers = new AdapterTrailers(new ArrayList<Trailer>());
-            adapterReviews = new AdapterReviews(new ArrayList<Review>());
+            adapterDetail = new AdapterDetail(movie, new ArrayList<Trailer>(), new ArrayList<Review>());
             getTrailers(movie.getId());
             getReviews(movie.getId());
 
@@ -120,31 +106,11 @@ public class DetailFragment extends Fragment {
     }
 
     private void intViews() {
-        tVFrgDetailTitleMovie.setText(movie.getTitle());
-        tVFrgDetailTitleMovie.setMovementMethod(new ScrollingMovementMethod());
-        Glide.with(getActivity())
-                .load(getString(R.string.url_images_files) + movie.getPosterPath())
-                .into(iVFrgDetailCover);
-        tVFrgDetailDate.setText(movie.getReleaseDate());
-        tVFrgDetailRate.setText(getString(R.string.frg_detail_averages, String.valueOf(movie.getVoteAverage())));
-        tVFrgDetailSynopsis.setText(movie.getOverview());
-        tVFrgDetailSynopsis.setMovementMethod(new ScrollingMovementMethod());
-
-        //Trailers
-        layoutManagerTrailers = new LinearLayoutManager(getActivity());
-        rVDetailTrailers.setHasFixedSize(true);
-        rVDetailTrailers.setLayoutManager(layoutManagerTrailers);
-        rVDetailTrailers.setNestedScrollingEnabled(false);
-        rVDetailTrailers.setAdapter(adapterTrailers);
-
-
-        //Reviews
-        layoutManagerReviews = new LinearLayoutManager(getActivity());
-        rVDetailReviews.setHasFixedSize(true);
-        rVDetailReviews.setLayoutManager(layoutManagerReviews);
-        rVDetailReviews.setNestedScrollingEnabled(false);
-        rVDetailReviews.setAdapter(adapterReviews);
-
+        layoutManagerDetails = new LinearLayoutManager(getActivity());
+        rVDetail.setHasFixedSize(true);
+        rVDetail.setLayoutManager(layoutManagerDetails);
+        rVDetail.setNestedScrollingEnabled(false);
+        rVDetail.setAdapter(adapterDetail);
     }
 
     @Override
@@ -159,6 +125,13 @@ public class DetailFragment extends Fragment {
             case android.R.id.home: {
                 getActivity().onBackPressed();
                 return true;
+            }
+            case R.id.action_share_trailer:{
+                if(adapterDetail.getTrailers().size()>0){
+                    ShareUtils.shareString(getActivity(),getString(R.string.url_video_youtube,adapterDetail.getTrailers().get(0).getKey()));
+                }else{
+                    Snackbar.make(rVDetail,getString(R.string.trailers_entry_title),Snackbar.LENGTH_LONG).show();
+                }
             }
         }
         return super.onOptionsItemSelected(item);
@@ -177,9 +150,8 @@ public class DetailFragment extends Fragment {
                 .enqueue(new Callback<ResponseMovieReviews>() {
                     @Override
                     public void onResponse(Response<ResponseMovieReviews> response, Retrofit retrofit) {
-                        pBFrgDetailReviews.setVisibility(View.GONE);
                         try {
-                            adapterReviews.setData(response.body().getResults());
+                            adapterDetail.setReviews(response.body().getResults());
                         } catch (NullPointerException e) {
 
                         }
@@ -200,14 +172,12 @@ public class DetailFragment extends Fragment {
                 .enqueue(new Callback<ResponseMovieTrailers>() {
                     @Override
                     public void onResponse(Response<ResponseMovieTrailers> response, Retrofit retrofit) {
-                        pBFrgDetailTrailers.setVisibility(View.GONE);
                         try {
-                            adapterTrailers.setData(response.body().getResults());
+                            adapterDetail.setTrailers(response.body().getResults());
                         } catch (NullPointerException e) {
 
                         }
                         DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
-//
                     }
 
                     @Override
@@ -218,4 +188,15 @@ public class DetailFragment extends Fragment {
                 });
     }
 
+    public void scrollToTrailers() {
+        if (rVDetail != null) {
+            layoutManagerDetails.scrollToPositionWithOffset(1, 0);
+        }
+    }
+
+    public void scrollToRevies() {
+        if (layoutManagerDetails != null) {
+            layoutManagerDetails.scrollToPositionWithOffset(2 + adapterDetail.getTrailers().size(), 0);
+        }
+    }
 }

@@ -60,4 +60,15 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    public void scrollToTrailers() {
+        if (getSupportFragmentManager().findFragmentById(R.id.container) instanceof DetailFragment){
+            ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.container)).scrollToTrailers();
+        }
+    }
+
+    public void scrollToReviews() {
+        if (getSupportFragmentManager().findFragmentById(R.id.container) instanceof DetailFragment){
+            ((DetailFragment) getSupportFragmentManager().findFragmentById(R.id.container)).scrollToRevies();
+        }
+    }
 }
