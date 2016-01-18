@@ -5,69 +5,99 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.ArrayList;
 
 /**
  * Copyright (C) 2015 The Android Open Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@DatabaseTable
 public class Movie implements Parcelable {
     public static final String MOVIE = Movie.class.getName();
     public static final String MOVIES = Movie.class.getName() + "s";
+    @DatabaseField
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
+    @DatabaseField
     @SerializedName("adult")
     @Expose
     private boolean adult;
+    @DatabaseField
     @SerializedName("overview")
-    @Expose
     private String overview;
+    @DatabaseField
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
+    @DatabaseField
     @SerializedName("genre_ids")
     @Expose
     private ArrayList<Integer> genreIds = new ArrayList<Integer>();
+    @DatabaseField
     @SerializedName("id")
     @Expose
     private int id;
+    @DatabaseField
     @SerializedName("original_title")
     @Expose
     private String originalTitle;
+    @DatabaseField
     @SerializedName("original_language")
     @Expose
     private String originalLanguage;
+    @DatabaseField
     @SerializedName("title")
     @Expose
     private String title;
+    @DatabaseField
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
+    @DatabaseField
     @SerializedName("popularity")
     @Expose
     private double popularity;
+    @DatabaseField
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
+    @DatabaseField
     @SerializedName("video")
     @Expose
     private boolean video;
+    @DatabaseField
     @SerializedName("vote_average")
     @Expose
     private double voteAverage;
+
+    @DatabaseField(id = true)
+    private Integer idGen;
+
+    public Movie() {
+    }
+
+    public Integer getIdGen() {
+        return idGen;
+    }
+
+    public void setIdGen(Integer idGen) {
+        this.idGen = idGen;
+    }
 
     /**
      * @return The posterPath

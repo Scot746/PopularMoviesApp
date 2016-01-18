@@ -1,10 +1,12 @@
 package pedroscott.com.popularmoviesapp.app;
 
+import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 
 import pedroscott.com.popularmoviesapp.R;
+import pedroscott.com.popularmoviesapp.app.db.DBQLiteHelper;
 import pedroscott.com.popularmoviesapp.rest.RestClientPublic;
 
 /**
@@ -25,6 +27,7 @@ import pedroscott.com.popularmoviesapp.rest.RestClientPublic;
 public class App extends MultiDexApplication {
 
     private static RestClientPublic restClientPublic;
+    private static DBQLiteHelper sqlExternalHelper;
 
     @Override
     public void onCreate() {
@@ -44,5 +47,13 @@ public class App extends MultiDexApplication {
     public static RestClientPublic getRestClientPublic() {
         return restClientPublic;
     }
+
+    public static DBQLiteHelper getDBExternalHelper(Context context) {
+        if (sqlExternalHelper == null) {
+            sqlExternalHelper = new DBQLiteHelper(context);
+        }
+        return sqlExternalHelper;
+    }
+
 
 }

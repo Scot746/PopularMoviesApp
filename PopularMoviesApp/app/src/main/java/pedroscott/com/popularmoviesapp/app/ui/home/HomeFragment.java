@@ -13,12 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
+import pedroscott.com.popularmoviesapp.app.db.MovieDaoAdapter;
+import pedroscott.com.popularmoviesapp.app.ui.base.BaseActivity;
 import pedroscott.com.popularmoviesapp.app.ui.home.adapter.AdapterMovies;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovies;
@@ -56,6 +62,7 @@ public class HomeFragment extends Fragment {
     private int page = 1;
     private int finalPage = 1000;
     private String selectSort;
+    private EndlessRecyclerOnScrollListener scrollListener;
 
     public static Fragment newInstance() {
         return new HomeFragment();
@@ -88,12 +95,10 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+
     private void intViews() {
         layoutManager = new GridLayoutManager(getActivity(), getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? 2 : 3);
-        rVHome.setHasFixedSize(true);
-        rVHome.setLayoutManager(layoutManager);
-        rVHome.setAdapter(adapter);
-        rVHome.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+        scrollListener = new EndlessRecyclerOnScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
                 page = currentPage;
@@ -102,32 +107,13 @@ public class HomeFragment extends Fragment {
                 }
 
             }
-        });
+        };
+        rVHome.setHasFixedSize(true);
+        rVHome.setLayoutManager(layoutManager);
+        rVHome.setAdapter(adapter);
+        rVHome.addOnScrollListener(scrollListener);
     }
 
-    private void loadMovies(String sort) {
-        selectSort = sort;
-        App.getRestClientPublic().getPublicService()
-                .getMovies(page,sort)
-                .enqueue(new Callback<ResponseMovies>() {
-                    @Override
-                    public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
-                        try {
-                            movies.addAll(response.body().getResults());
-                            adapter.setData(movies);
-                            DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
-                        } catch (NullPointerException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Throwable t) {
-                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
-
-                    }
-                });
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -150,19 +136,64 @@ public class HomeFragment extends Fragment {
                 return true;
             }
             case R.id.action_popularity: {
-                movies.clear();
-                adapter.getItems().clear();
+                clearData();
                 loadMovies(getString(R.string.sort_by_popularity));
                 return true;
             }
             case R.id.action_vote: {
-                movies.clear();
-                adapter.getItems().clear();
+                clearData();
                 loadMovies(getString(R.string.sort_by_vote));
                 return true;
             }
+            case R.id.action_favorites: {
+                clearData();
+                loadMoviesFavorites();
+                return true;
+            }
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void clearData() {
+        page = 1;
+        movies.clear();
+        adapter.getItems().clear();
+    }
+
+
+    private void loadMovies(String sort) {
+        selectSort = sort;
+        App.getRestClientPublic().getPublicService()
+                .getMovies(page, sort)
+                .enqueue(new Callback<ResponseMovies>() {
+                    @Override
+                    public void onResponse(Response<ResponseMovies> response, Retrofit retrofit) {
+                        try {
+                            movies.addAll(response.body().getResults());
+                            adapter.setData(movies);
+                            DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+
+                    }
+                });
+    }
+
+    private void loadMoviesFavorites()  {
+        try {
+           movies =  MovieDaoAdapter.getAllMovies(getActivity());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        rVHome.removeOnScrollListener(scrollListener);
+        adapter.setData(movies);
     }
 
 
