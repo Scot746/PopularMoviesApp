@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
+import pedroscott.com.popularmoviesapp.app.db.MovieDaoAdapter;
 import pedroscott.com.popularmoviesapp.app.ui.detail.adapter.AdapterDetail;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.model.Review;
@@ -59,8 +61,12 @@ public class DetailFragment extends Fragment {
     FloatingActionButton fBDetailsFavorites;
 
     @OnClick(R.id.fBDetailsFavorites)
-    public void setfavorite(){
-        fBDetailsFavorites.setSelected(true);
+    public void setfavorite() {
+        try {
+            fBDetailsFavorites.setSelected(MovieDaoAdapter.favoriteMovie(getActivity(), movie));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private Movie movie;
@@ -92,7 +98,6 @@ public class DetailFragment extends Fragment {
             adapterDetail = new AdapterDetail(movie, new ArrayList<Trailer>(), new ArrayList<Review>());
             getTrailers(movie.getId());
             getReviews(movie.getId());
-
         }
     }
 
@@ -111,6 +116,11 @@ public class DetailFragment extends Fragment {
         rVDetail.setLayoutManager(layoutManagerDetails);
         rVDetail.setNestedScrollingEnabled(false);
         rVDetail.setAdapter(adapterDetail);
+        try {
+            fBDetailsFavorites.setSelected(MovieDaoAdapter.isMovieFavorite(getActivity(), movie.getId()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -126,17 +136,16 @@ public class DetailFragment extends Fragment {
                 getActivity().onBackPressed();
                 return true;
             }
-            case R.id.action_share_trailer:{
-                if(adapterDetail.getTrailers().size()>0){
-                    ShareUtils.shareString(getActivity(),getString(R.string.url_video_youtube,adapterDetail.getTrailers().get(0).getKey()));
-                }else{
-                    Snackbar.make(rVDetail,getString(R.string.trailers_entry_title),Snackbar.LENGTH_LONG).show();
+            case R.id.action_share_trailer: {
+                if (adapterDetail.getTrailers().size() > 0) {
+                    ShareUtils.shareString(getActivity(), getString(R.string.url_video_youtube, adapterDetail.getTrailers().get(0).getKey()));
+                } else {
+                    Snackbar.make(rVDetail, getString(R.string.trailers_entry_title), Snackbar.LENGTH_LONG).show();
                 }
             }
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onDestroyView() {
@@ -194,7 +203,7 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    public void scrollToRevies() {
+    public void scrollToReviews() {
         if (layoutManagerDetails != null) {
             layoutManagerDetails.scrollToPositionWithOffset(2 + adapterDetail.getTrailers().size(), 0);
         }

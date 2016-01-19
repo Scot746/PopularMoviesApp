@@ -13,12 +13,12 @@
 
         <TextView
             android:id="@+id/tVItemNameTrailer"
+            style="@style/TextViewTitle"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/bTItemPlay"
             android:layout_toStartOf="@+id/bTItemPlay"
             android:maxLines="2"
-            android:textSize="16sp"
-            style="@style/TextViewTitle" />
+            android:textSize="16sp" />
 
 
         <android.support.design.widget.FloatingActionButton

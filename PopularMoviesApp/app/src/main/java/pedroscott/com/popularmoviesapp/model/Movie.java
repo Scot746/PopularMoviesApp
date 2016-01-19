@@ -8,8 +8,6 @@ import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.ArrayList;
-
 /**
  * Copyright (C) 2015 The Android Open Source Project
  * <p/>
@@ -44,11 +42,7 @@ public class Movie implements Parcelable {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
-    @DatabaseField
-    @SerializedName("genre_ids")
-    @Expose
-    private ArrayList<Integer> genreIds = new ArrayList<Integer>();
-    @DatabaseField
+    @DatabaseField(id = true)
     @SerializedName("id")
     @Expose
     private int id;
@@ -85,18 +79,7 @@ public class Movie implements Parcelable {
     @Expose
     private double voteAverage;
 
-    @DatabaseField(id = true)
-    private Integer idGen;
-
     public Movie() {
-    }
-
-    public Integer getIdGen() {
-        return idGen;
-    }
-
-    public void setIdGen(Integer idGen) {
-        this.idGen = idGen;
     }
 
     /**
@@ -153,20 +136,6 @@ public class Movie implements Parcelable {
      */
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    /**
-     * @return The genreIds
-     */
-    public ArrayList<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    /**
-     * @param genreIds The genre_ids
-     */
-    public void setGenreIds(ArrayList<Integer> genreIds) {
-        this.genreIds = genreIds;
     }
 
     /**
@@ -300,12 +269,6 @@ public class Movie implements Parcelable {
         adult = in.readByte() != 0x00;
         overview = in.readString();
         releaseDate = in.readString();
-        if (in.readByte() == 0x01) {
-            genreIds = new ArrayList<Integer>();
-            in.readList(genreIds, Integer.class.getClassLoader());
-        } else {
-            genreIds = null;
-        }
         id = in.readInt();
         originalTitle = in.readString();
         originalLanguage = in.readString();
@@ -328,12 +291,6 @@ public class Movie implements Parcelable {
         dest.writeByte((byte) (adult ? 0x01 : 0x00));
         dest.writeString(overview);
         dest.writeString(releaseDate);
-        if (genreIds == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(genreIds);
-        }
         dest.writeInt(id);
         dest.writeString(originalTitle);
         dest.writeString(originalLanguage);

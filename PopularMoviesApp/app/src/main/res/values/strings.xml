@@ -12,7 +12,7 @@
     <string name="reviews_title">Reviews</string>
     <string name="frg_detail_review_item_author">Author:</string>
     <string name="frg_detail_review_item_review">Review:</string>
-    <string name="frg_details_item_movie_realese_date">Realese date:</string>
+    <string name="frg_details_item_movie_release_date">Release date:</string>
     <string name="frg_details_item_movie_average">Average:</string>
     <string name="frg_details_item_movie_see_trailers">See Trailers</string>
     <string name="frg_details_item_movie_read_reviews">Read Reviews</string>
@@ -21,4 +21,7 @@
     <string name="action_share">Share trailer</string>
     <string name="url_video_youtube">https://www.youtube.com/watch?v=%1$s</string>
     <string name="action_favorites">Favorites</string>
+    <string name="no_movies">No movies available</string>
+    <string name="error_server">Error communication with server try later</string>
+    <string name="no_favorites">No favorites available</string>
 </resources>

@@ -34,8 +34,8 @@
         <TextView
             android:id="@+id/tVItemReviewTitle"
             style="@style/TextViewTitle"
-            android:layout_marginLeft="@dimen/default_medium_size"
             android:layout_below="@+id/rLItemReviewAuthor"
+            android:layout_marginLeft="@dimen/default_medium_size"
             android:text="@string/frg_detail_review_item_review" />
 
         <TextView

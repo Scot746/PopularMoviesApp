@@ -12,9 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.RuntimeExceptionDao;
+import android.widget.TextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,7 +22,6 @@ import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
 import pedroscott.com.popularmoviesapp.app.db.MovieDaoAdapter;
-import pedroscott.com.popularmoviesapp.app.ui.base.BaseActivity;
 import pedroscott.com.popularmoviesapp.app.ui.home.adapter.AdapterMovies;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovies;
@@ -59,10 +56,14 @@ public class HomeFragment extends Fragment {
 
     @Bind(R.id.rVHome)
     RecyclerView rVHome;
+    @Bind(R.id.tVFrgHomeEntryText)
+    TextView tVFrgHomeEntryText;
+
     private int page = 1;
     private int finalPage = 1000;
     private String selectSort;
     private EndlessRecyclerOnScrollListener scrollListener;
+    private boolean isFavoriteScream;
 
     public static Fragment newInstance() {
         return new HomeFragment();
@@ -111,7 +112,9 @@ public class HomeFragment extends Fragment {
         rVHome.setHasFixedSize(true);
         rVHome.setLayoutManager(layoutManager);
         rVHome.setAdapter(adapter);
-        rVHome.addOnScrollListener(scrollListener);
+        if (!isFavoriteScream) {
+            rVHome.addOnScrollListener(scrollListener);
+        }
     }
 
 
@@ -147,6 +150,7 @@ public class HomeFragment extends Fragment {
             }
             case R.id.action_favorites: {
                 clearData();
+                isFavoriteScream = true;
                 loadMoviesFavorites();
                 return true;
             }
@@ -161,8 +165,16 @@ public class HomeFragment extends Fragment {
         adapter.getItems().clear();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isFavoriteScream) {
+            loadMoviesFavorites();
+        }
+    }
 
     private void loadMovies(String sort) {
+        isFavoriteScream = false;
         selectSort = sort;
         App.getRestClientPublic().getPublicService()
                 .getMovies(page, sort)
@@ -172,6 +184,7 @@ public class HomeFragment extends Fragment {
                         try {
                             movies.addAll(response.body().getResults());
                             adapter.setData(movies);
+                            validateEntryState(getString(R.string.no_movies));
                             DebugUtils.PrintLogMessage(TAG, response.toString(), DebugUtils.DebugMessageType.ERROR);
                         } catch (NullPointerException e) {
                             e.printStackTrace();
@@ -181,19 +194,30 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure(Throwable t) {
                         DebugUtils.PrintLogMessage(TAG, t.toString(), DebugUtils.DebugMessageType.ERROR);
+                        validateEntryState(getString(R.string.error_server));
 
                     }
                 });
     }
 
-    private void loadMoviesFavorites()  {
+    private void validateEntryState(String message) {
+        if (adapter.getItems().size() > 0) {
+            tVFrgHomeEntryText.setVisibility(View.GONE);
+        } else {
+            tVFrgHomeEntryText.setVisibility(View.VISIBLE);
+        }
+        tVFrgHomeEntryText.setText(message);
+    }
+
+    private void loadMoviesFavorites() {
         try {
-           movies =  MovieDaoAdapter.getAllMovies(getActivity());
+            movies = MovieDaoAdapter.getAllMovies(getActivity());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         rVHome.removeOnScrollListener(scrollListener);
         adapter.setData(movies);
+        validateEntryState(getString(R.string.no_favorites));
     }
 
 

@@ -1,9 +1,25 @@
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rVHome"
-    android:layout_column="2"
     tools:context=".app.ui.home.HomeFragment"
-    tools:showIn="@layout/activity_main" />
+    tools:showIn="@layout/activity_main">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rVHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tVFrgHomeEntryText"
+        style="@style/TextViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/default_large_size"
+        android:gravity="center"
+        android:textSize="24sp" />
+
+</RelativeLayout>
+
+
 

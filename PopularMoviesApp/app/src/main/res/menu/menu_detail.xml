@@ -4,8 +4,8 @@
     tools:context=".app.ui.MainActivity">
     <item
         android:id="@+id/action_share_trailer"
-        android:orderInCategory="100"
         android:icon="@android:drawable/ic_menu_share"
+        android:orderInCategory="100"
         android:title="@string/action_share"
         app:showAsAction="always" />
 </menu>

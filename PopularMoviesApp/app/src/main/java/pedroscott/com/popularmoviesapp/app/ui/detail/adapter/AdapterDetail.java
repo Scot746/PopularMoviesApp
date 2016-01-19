@@ -112,13 +112,13 @@ public class AdapterDetail extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private void loadViewHolderHeader(ViewHolderHeader holder) {
         holder.tVHeader.setText(getItemViewType(holder.getAdapterPosition()) == TRAILERS_HEADER_VIEW_TYPE ? holder.tVHeader.getContext().getString(R.string.trailers_title) :
                 holder.tVHeader.getContext().getString(R.string.reviews_title));
-        if(getItemViewType(holder.getAdapterPosition()) == TRAILERS_HEADER_VIEW_TYPE && getTrailers().size()==0){
+        if (getItemViewType(holder.getAdapterPosition()) == TRAILERS_HEADER_VIEW_TYPE && getTrailers().size() == 0) {
             holder.tVItemHeaderMessage.setVisibility(View.VISIBLE);
             holder.tVItemHeaderMessage.setText(holder.tVHeader.getContext().getString(R.string.trailers_entry_title));
-        }else if(getItemViewType(holder.getAdapterPosition()) == REVIEWS_HEADER_VIEW_TYPE && getReviews().size()==0){
+        } else if (getItemViewType(holder.getAdapterPosition()) == REVIEWS_HEADER_VIEW_TYPE && getReviews().size() == 0) {
             holder.tVItemHeaderMessage.setVisibility(View.VISIBLE);
             holder.tVItemHeaderMessage.setText(holder.tVHeader.getContext().getString(R.string.reviews_entry_title));
-        }else{
+        } else {
             holder.tVItemHeaderMessage.setVisibility(View.GONE);
             holder.tVItemHeaderMessage.setText("");
         }
@@ -154,13 +154,13 @@ public class AdapterDetail extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         });
     }
 
-    private void loadViewHolderTrailer(final ViewHolderTrailer holder, Trailer trailer) {
+    private void loadViewHolderTrailer(final ViewHolderTrailer holder, final Trailer trailer) {
         holder.tVItemNameTrailer.setText(trailer.getName());
 
         holder.bTItemPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.goToYooTube(v.getContext(), getTrailers().get(holder.getAdapterPosition()).getKey());
+                IntentUtils.goToYooTube(v.getContext(), trailer.getKey());
             }
         });
     }
