@@ -6,7 +6,7 @@ import android.support.multidex.MultiDexApplication;
 import com.facebook.stetho.Stetho;
 
 import pedroscott.com.popularmoviesapp.R;
-import pedroscott.com.popularmoviesapp.app.db.DBQLiteHelper;
+import pedroscott.com.popularmoviesapp.db.DBQLiteHelper;
 import pedroscott.com.popularmoviesapp.rest.RestClientPublic;
 
 /**

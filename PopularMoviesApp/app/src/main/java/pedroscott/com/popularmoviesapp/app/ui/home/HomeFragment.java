@@ -21,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
-import pedroscott.com.popularmoviesapp.app.db.MovieDaoAdapter;
+import pedroscott.com.popularmoviesapp.db.MovieDaoAdapter;
 import pedroscott.com.popularmoviesapp.app.ui.home.adapter.AdapterMovies;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.rest.responses.ResponseMovies;

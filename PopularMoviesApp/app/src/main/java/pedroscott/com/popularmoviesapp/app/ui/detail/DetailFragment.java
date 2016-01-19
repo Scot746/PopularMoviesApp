@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pedroscott.com.popularmoviesapp.R;
 import pedroscott.com.popularmoviesapp.app.App;
-import pedroscott.com.popularmoviesapp.app.db.MovieDaoAdapter;
+import pedroscott.com.popularmoviesapp.db.MovieDaoAdapter;
 import pedroscott.com.popularmoviesapp.app.ui.detail.adapter.AdapterDetail;
 import pedroscott.com.popularmoviesapp.model.Movie;
 import pedroscott.com.popularmoviesapp.model.Review;

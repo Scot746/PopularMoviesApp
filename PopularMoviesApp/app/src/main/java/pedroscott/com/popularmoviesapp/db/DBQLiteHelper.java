@@ -1,4 +1,4 @@
-package pedroscott.com.popularmoviesapp.app.db;
+package pedroscott.com.popularmoviesapp.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
