@@ -1,9 +1,12 @@
 package pedroscott.com.popularmoviesapp.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+
+import pedroscott.com.popularmoviesapp.R;
 
 
 /**
@@ -23,8 +26,12 @@ import android.net.Uri;
  */
 public class IntentUtils {
 
-    public static void goToYooTube(Context context, String url) {
-        context.startActivity(newYouTubeIntent(context.getPackageManager(), url));
+    public static void goToYouTube(Context context, String url) {
+        try {
+            context.startActivity(newYouTubeIntent(context.getPackageManager(), url));
+        }catch (ActivityNotFoundException exception){
+            context.startActivity(newWebBrowser(context.getString(R.string.url_video_youtube,url)));
+        }
     }
 
     /**
@@ -51,5 +58,12 @@ public class IntentUtils {
         }
         return intent;
     }
+
+    private static Intent newWebBrowser(String url){
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        return i;
+    }
+
 
 }
