@@ -17,7 +17,6 @@
 # Build files #
 ###############
 build
-.gradle
 **/build/
 **/.gradle
 
