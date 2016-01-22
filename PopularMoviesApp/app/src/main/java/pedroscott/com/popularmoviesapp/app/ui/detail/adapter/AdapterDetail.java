@@ -160,7 +160,7 @@ public class AdapterDetail extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.bTItemPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtils.goToYooTube(v.getContext(), trailer.getKey());
+                IntentUtils.goToYouTube(v.getContext(), trailer.getKey());
             }
         });
     }
