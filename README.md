@@ -3,11 +3,11 @@ The first app to Nanodegree android to Udacity. This app is to introduce the dev
 
 ## What Will I Learn?
 
-* Develop Android app 
-* Consume web service
-* Save cache date with databases
-* Manager differed size of screens
-* Create master details screens
+* I fetched data from the Internet with theMovieDB API.
+* I used adapters and custom list layouts to populate list views.
+* I incorporated libraries to simplify the amount of code you need to write
+* I built a fully featured application that looks and feels natural on the latest Android operating system (Lollipop, as of May 2015) 
+* I optimized the UI experience for both phones and tablet
 
 ## Screens
 
