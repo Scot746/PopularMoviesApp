@@ -1,6 +1,14 @@
 # Popular Movies App
 The first app to Nanodegree android to Udacity. This app is to introduce the developer to the android technology and the use of the Android SDK, in this app, you will see the most popular movies in theater by The Movie DataBase, the details, trailers, and reviews of the movies.
 
+## What Will I Learn?
+
+* Develop Android app 
+* Consume web service
+* Save cache date with databases
+* Manager differed size of screens
+* Create master details screens
+
 ## Screens
 
 ![screen](../master/images/movies_home.png) 
