@@ -83,16 +83,16 @@ public class AdapterMovies extends RecyclerView.Adapter<AdapterMovies.ViewHolder
         @Bind(R.id.iVItemMovie)
         ImageView iVItemMovie;
 
-        public ViewHolder(final View view) {
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
             iVItemMovie.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Movie movie = getItems().get(getAdapterPosition());
-                    if (v.getContext() instanceof MainActivity
-                            && ((MainActivity) v.getContext()).isScreamWithToPages()) {
-                        ((BaseActivity) v.getContext()).navigateDetailContent(
+                    if (itemView.getContext() instanceof MainActivity
+                            && ((MainActivity) itemView.getContext()).isScreamWithToPages()) {
+                        ((BaseActivity) itemView.getContext()).navigateDetailContent(
                                 DetailFragment.newInstance(movie),
                                 v.getContext().getString(R.string.app_name), R.id.container_detail);
                     } else {

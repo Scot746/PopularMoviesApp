@@ -2,6 +2,26 @@
 First app to nanodegree android to udacity. 
 
 
+## Screens
+
+![screen](../images/movies_home.png)
+![screen](../images/movies-details.png)
+![screen](../images/movies-tablet.png)
+
+## Third Party Libraries
+
+* [ButterKnife](https://github.com/JakeWharton/butterknife)
+* [Retrofit](https://github.com/square/retrofit)
+* [Gson](https://github.com/square/retrofit/tree/master/retrofit-converters/gson)
+* [OrmLite](http://ormlite.com/sqlite_java_android_orm.shtml)
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [Glide](https://github.com/bumptech/glide)
+
+## Requirements.
+
+For can use this app is important that you provide a API Key in string files with the mane api_key_themoviedb. 
+You can generate this API Key form [The Movie Database](https://www.themoviedb.org/documentation/api)
+
 ## Android Developer Nanodegree, Udacity.
 [![udacity][1]][2]
 
