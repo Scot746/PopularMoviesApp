@@ -4,8 +4,7 @@ First app to nanodegree android to udacity.
 
 ## Screens
 
-![screen](../master/images/movies_home.png)
-![screen](../master/images/movies_details.png)
+![screen](../master/images/movies_home.png) ![screen](../master/images/movies_details.png)
 ![screen](../master/images/movies_tablet.png)
 
 ## Third Party Libraries
